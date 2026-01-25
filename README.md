@@ -9,6 +9,7 @@
     - Transfer Learning
     - Data Augmentation
     - Frameworks and Libraries
+Above may change by a little due to time constraints and material.
 
 - Notebook Session for Week 1:
 > [!NOTE]
