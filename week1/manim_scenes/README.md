@@ -7,9 +7,9 @@ from week1/ folder,
 `python -m manim $your_script_name.py$ $-your_tag$`
 `manim .\manim_scenes\$your_script_name.py$ $-your_tag$`
 for tag:
--ql: 480p15fps
--qm: 720p30fps
--qh: 1080p60fps
--qp: 1440p60fps
+- ql: 480p15fps
+- qm: 720p30fps
+- qh: 1080p60fps
+- qp: 1440p60fps
 
 -qh --fps 30 is suggested, as it won't have alignment issues when converting to `gif` format either.
