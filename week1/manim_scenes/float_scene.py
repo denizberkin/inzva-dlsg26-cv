@@ -20,9 +20,9 @@ from manim import (
     config,
 )
 
-config.background_color = "#F5F5DC"  # beige
-Text.set_default(color=BLACK)
-MathTex.set_default(color=BLACK)
+# config.background_color = "#F5F5DC"  # beige
+# Text.set_default(color=BLACK)
+# MathTex.set_default(color=BLACK)
 
 
 class FloatScene(Scene):
@@ -85,7 +85,7 @@ class FloatScene(Scene):
 
         self.play(FadeIn(formula_display), Create(highlights))
 
-        for t in range(13):
+        for t in range(0, 11):
             terms = []
             indices = [i - (t - 5) for i in range(6)]
             for i, j in enumerate(indices):
@@ -95,7 +95,7 @@ class FloatScene(Scene):
                     terms.append(term_str)
 
             formula_content = " + ".join(terms) if terms else ""
-            formula_str = f"y({t}) = " + formula_content
+            formula_str = f"y({t+2}) = " + formula_content
             new_formula = MathTex(formula_str, font_size=26).to_edge(UP, buff=1.0)
 
             self.play(dice_b.animate.shift(RIGHT * step_width), Transform(formula_display, new_formula), run_time=1.0)

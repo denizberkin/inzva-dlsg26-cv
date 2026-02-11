@@ -1,7 +1,15 @@
 __pycache__/*
+*/__pycache__
+media*
 
-
+# ignore claire de lune as its large
+scripts/data/cdl.wav
 *.pyc
 *.pyo
 *.pptx
 *.ipynb_checkpoints
+*.mp4
+
+
+# specific files
+data/cdl.wav

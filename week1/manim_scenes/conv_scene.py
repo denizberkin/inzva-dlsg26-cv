@@ -1,8 +1,8 @@
 from manim import BLACK, MathTex, Scene, Text, Write, config
 
-config.background_color = "#F5F5DC"  # beige
-Text.set_default(color=BLACK)
-MathTex.set_default(color=BLACK)
+# config.background_color = "#F5F5DC"  # beige
+# Text.set_default(color=BLACK)
+# MathTex.set_default(color=BLACK)
 
 
 class ConvScene(Scene):

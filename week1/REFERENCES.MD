@@ -1,0 +1,21 @@
+# References
+## [From Convolution markdown](CONVOLUTION.md)
+- [mp4 to gif converter](https://github.com/kvdomingo/mp4-to-gif)
+- [Convolutions Explained, 3Blue1Brown](https://www.youtube.com/watch?v=KuXjwB4LzSA)
+
+## [From CNN markdown](CNN.md)
+- [John Lambert](https://johnwlambert.github.io/conv-backprop/#backprop-throughconv-to-weights)
+- [tensorflow playground - gradcam](https://playground.tensorflow.org)
+- [convnetjs examples from Andrej Karpathy](https://cs.stanford.edu/people/karpathy/convnetjs/)
+- [distill's feature visualization](https://distill.pub/2017/feature-visualization/)
+
+## [From CNN Architectures markdown](CNN_ARCHITECTURES.md)
+- [Auto Encoding Variational Bayes, VAEs](https://arxiv.org/pdf/1312.6114)
+- [LeNet](http://vision.stanford.edu/cs598_spring07/papers/Lecun98.pdf)
+- [AlexNet](https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf)
+- [VGG](https://arxiv.org/pdf/1409.1556.pdf)
+- [ResNet](https://arxiv.org/pdf/1512.03385.pdf)
+- [InceptionNet](https://arxiv.org/pdf/1409.4842.pdf)
+- [MobileNet](https://arxiv.org/pdf/1704.04861.pdf)
+- [EfficientNet](https://arxiv.org/pdf/1905.11946.pdf)
+- [Vision Transformers (ViT)](https://arxiv.org/pdf/2010.11929.pdf)

@@ -17,9 +17,9 @@ from manim import (
     config,
 )
 
-config.background_color = "#F5F5DC"  # beige
-Text.set_default(color=BLACK)
-MathTex.set_default(color=BLACK)
+# config.background_color = "#F5F5DC"  # beige
+# Text.set_default(color=BLACK)
+# MathTex.set_default(color=BLACK)
 
 
 class DiceScene(Scene):
@@ -62,7 +62,7 @@ class DiceScene(Scene):
 
         # step 3: sliding window
         self.play(FadeOut(dice_b_label, dice_a_label), run_time=0.5)
-        self.play(dice_b.animate.shift(LEFT * step_width * 5))
+        self.play(dice_b.animate.shift(LEFT * step_width * 5), run_time=2.0)
         self.wait(0.5)
 
         prob_formula = MathTex("P(A + B = n) = \\frac{\\text{number of ways}}{36}", font_size=42)
