@@ -155,7 +155,7 @@ Pooling layers provide `translation invariance` meaning if an object in the imag
 - **Average Pooling**: Extracts a smoothed summary of the region. $$Y = \frac{1}{f^2} \sum_{i,j} I_{i,j}$$
 
 <p align="center">
-  <img src="assets/max_7pooling_scene.gif" />
+  <img src="assets/max_pooling_scene.gif" />
 </p>
 
 ---
@@ -170,6 +170,10 @@ It is a simple yet powerful regularization. During training, some set of neurons
 - Prevents network to rely on only some neurons and nothing else, distributing "learned weights"
 - **Interesting practice**: remaninig neurons are scaled with $\frac{1}{1-p}$ to maintain the total magnitude of the activation.
 - **Inference**: Dropout is turned off at test.
+
+<p align="center">
+  <img src="assets/dropout_scene.gif" />
+</p>
 
 ```py
 import torch
@@ -205,6 +209,10 @@ Transformation: For a mini-batch  $\mathcal{B} = \{x_1, \dots, x_m\}$:
 4. **Scale and Shift**: $y_i = \gamma \hat{x}_i + \beta$ (where $\gamma$ and $\beta$ are learnable parameters)
 * $\epsilon$: small constant for zero division / numerical stability
 * $\gamma$ and $\beta$: Learnable parameters that allow the network to restore the original distribution by learning mean and variance.
+
+<p align="center">
+  <img src="assets/batchnorm_scene.gif" />
+</p>
 
 ```py
 import torch
