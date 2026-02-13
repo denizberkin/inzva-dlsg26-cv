@@ -6,10 +6,9 @@ from manim import (
     FadeIn, FadeOut, Write, Create, Transform, ReplacementTransform, GrowFromCenter, GrowArrow, LaggedStart
 )
 
-class BatchNorm2DVisual(Scene):
+class BatchNormScene(Scene):
     def construct(self):
         # --- CONFIGURATION & PALETTE ---
-        # self.camera.background_color = "#1e1e1e"
         c_batch = [BLUE_D, BLUE_C, BLUE_B]
         c_channel_highlight = GOLD
         
@@ -23,22 +22,16 @@ class BatchNorm2DVisual(Scene):
         batch_size = 3
         channels = 3
         
-        # Group to hold all maps
         feature_maps = VGroup()
         
-        # Create the grid
         for b in range(batch_size):
             batch_row = VGroup()
             for c in range(channels):
-                # Feature Map Rectangle
                 fmap = Square(side_length=1.2)
                 fmap.set_fill(c_batch[b], opacity=0.8)
                 fmap.set_stroke(WHITE, width=2)
                 
-                # Label
                 label = MathTex(f"x_{{{b},{c}}}", font_size=24).move_to(fmap.center())
-                
-                # Combine map and label
                 map_group = VGroup(fmap, label)
                 batch_row.add(map_group)
             
@@ -48,7 +41,6 @@ class BatchNorm2DVisual(Scene):
         feature_maps.arrange(DOWN, buff=0.5)
         feature_maps.move_to(ORIGIN).shift(DOWN * 0.5)
         
-        # Labels for the grid
         batch_label = Text("Batch (N)", font_size=24, color=GRAY).next_to(feature_maps, LEFT, buff=0.5).rotate(90 * DEGREES)
         channel_label = Text("Channels (C)", font_size=24, color=GRAY).next_to(feature_maps, UP, buff=0.5)
 
@@ -64,14 +56,13 @@ class BatchNorm2DVisual(Scene):
         explanation_1.set_color_by_tex("$k$", GOLD)
         explanation_1.to_edge(UP).shift(DOWN * 0.6)
         
-        # Animations: Dim everything except Column 1 (Channel 1)
         anims = []
-        target_maps = VGroup() # Store the highlighted maps to move them later
+        target_maps = VGroup()
         
         for b in range(batch_size):
             for c in range(channels):
                 m_group = feature_maps[b][c]
-                if c == 1: # The selected channel (middle)
+                if c == 1:
                     anims.append(m_group[0].animate.set_fill(c_channel_highlight, opacity=1.0))
                     anims.append(m_group[0].animate.set_stroke(GOLD_A, width=4))
                     target_maps.add(m_group)
@@ -89,14 +80,10 @@ class BatchNorm2DVisual(Scene):
         
         self.play(
             FadeOut(batch_label), FadeOut(channel_label),
-            # Fade out non-selected maps
             *[FadeOut(feature_maps[b][c]) for b in range(batch_size) for c in range(channels) if c != 1],
-            # Move selected to left
             selected_col.animate.arrange(DOWN, buff=0.2).to_edge(LEFT, buff=1.0),
-            # explanation_1.
         )
         
-        # Add a brace to show these are pooled
         brace = Brace(selected_col, RIGHT)
         brace_text = brace.get_text(r"Compute $\mu, \sigma^2$")
         
@@ -112,7 +99,7 @@ class BatchNorm2DVisual(Scene):
             axis_config={"color": GREY},
         ).to_edge(RIGHT, buff=1.0)
         
-        # 1. Unnormalized Distribution (Shifted and Wide)
+        # 1. input distribution (Shifted and Wide)
         mu_start, sigma_start = 1.5, 1.2
         dist_raw = axes.plot(lambda x: np.exp(-0.5 * ((x - mu_start)/sigma_start)**2) / (sigma_start * np.sqrt(2*np.pi)), color=RED)
         label_raw = MathTex(r"\text{Input Distribution } x").next_to(axes, UP).set_color(RED)
@@ -120,7 +107,7 @@ class BatchNorm2DVisual(Scene):
         self.play(Create(axes), Create(dist_raw), Write(label_raw))
         self.wait(1)
 
-        # 2. Normalize (Center at 0, Scale to 1)
+        # 2. norm (Center at 0, Scale to 1)
         form_norm = MathTex(r"\hat{x} = \frac{x - \mu}{\sqrt{\sigma^2 + \epsilon}}", font_size=36)
         form_norm.next_to(brace, RIGHT, buff=0.5).shift(UP*1.5)
         
@@ -134,23 +121,21 @@ class BatchNorm2DVisual(Scene):
         )
         self.wait(1)
 
-        # 3. Scale and Shift (Gamma and Beta)
-        # Formula
+        # 3. scale and shift
         form_scale = MathTex(r"y = \gamma \hat{x} + \beta", font_size=36)
         form_scale.move_to(form_norm.get_center())
         
-        # Final Distribution (Learned parameters)
+        # final distribution (after learning gamma and beta)
         gamma, beta = 0.7, -1.0
         dist_final = axes.plot(lambda x: np.exp(-0.5 * ((x - beta)/gamma)**2) / (gamma * np.sqrt(2*np.pi)), color=GOLD)
         label_final = MathTex(r"\text{Output } y").next_to(axes, UP).set_color(GOLD)
         
-        # Add labels for Gamma and Beta arrows
         arrow_beta = Arrow(start=axes.c2p(0, 0.5), end=axes.c2p(beta, 0.5), color=GOLD, buff=0)
         lbl_beta = MathTex(r"\beta").next_to(arrow_beta, UP, buff=0.1).set_color(GOLD)
         
         self.play(
-            ReplacementTransform(explanation_1, form_scale), # reuse explanation object for smooth transition
-            Transform(dist_raw, dist_final), # dist_raw is actually holding the green curve now due to previous transform
+            ReplacementTransform(explanation_1, form_scale),
+            Transform(dist_raw, dist_final),
             Transform(label_raw, label_final),
             GrowArrow(arrow_beta),
             Write(lbl_beta)
