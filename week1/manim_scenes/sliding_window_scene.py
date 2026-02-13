@@ -1,30 +1,9 @@
 from manim import (
-    BLACK,
-    BLUE,
-    DOWN,
-    GREEN,
-    LEFT,
-    ORANGE,
-    PURE_RED,
-    RED,
-    RIGHT,
-    UP,
-    DecimalNumber,
-    FadeIn,
-    FadeOut,
-    MathTex,
-    Rectangle,
-    Scene,
-    SurroundingRectangle,
-    Text,
-    VGroup,
-    config,
+    Scene, SurroundingRectangle, Text, VGroup, MathTex, Rectangle, DecimalNumber,
+    BLUE, GREEN, ORANGE, RED, PURE_RED,
+    DOWN, LEFT, RIGHT, UP,
+    FadeIn, FadeOut,
 )
-
-# config.background_color = "#F5F5DC"  # beige
-# Text.set_default(color=BLACK)
-# MathTex.set_default(color=BLACK)
-# DecimalNumber.set_default(color=BLACK)
 
 
 class SlidingWindowScene(Scene):

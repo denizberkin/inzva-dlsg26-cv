@@ -1,28 +1,11 @@
 import random
 
 from manim import (
-    BLACK,
-    BLUE,
-    DOWN,
-    LEFT,
-    RED,
-    RIGHT,
-    UP,
-    Create,
-    FadeIn,
-    FadeOut,
-    MathTex,
-    Scene,
-    Square,
-    Text,
-    Transform,
-    VGroup,
-    config,
+    Scene, VGroup, MathTex, Square, Text,
+    DOWN, LEFT, RIGHT, UP,
+    BLUE, RED,
+    Create, FadeIn, FadeOut, Transform,
 )
-
-# config.background_color = "#F5F5DC"  # beige
-# Text.set_default(color=BLACK)
-# MathTex.set_default(color=BLACK)
 
 
 class FloatScene(Scene):

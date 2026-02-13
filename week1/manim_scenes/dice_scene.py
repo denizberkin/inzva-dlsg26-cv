@@ -1,25 +1,9 @@
 from manim import (
-    BLACK,
-    BLUE,
-    DOWN,
-    LEFT,
-    RED,
-    RIGHT,
-    UP,
-    FadeOut,
-    MathTex,
-    Scene,
-    Square,
-    Text,
-    Transform,
-    VGroup,
-    Write,
-    config,
+    Scene, MathTex, Square, Text, VGroup,
+    BLUE, RED,
+    DOWN, LEFT, RIGHT, UP,
+    FadeOut, Transform, Write,
 )
-
-# config.background_color = "#F5F5DC"  # beige
-# Text.set_default(color=BLACK)
-# MathTex.set_default(color=BLACK)
 
 
 class DiceScene(Scene):

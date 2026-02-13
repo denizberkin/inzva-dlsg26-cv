@@ -7,7 +7,7 @@ from manim import (
 )
 
 
-class Conv2D_Horizontal_Final(Scene):
+class Conv2DScene(Scene):
     def construct(self):
         np.random.seed(42)
         input_size = 5
