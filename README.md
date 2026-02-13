@@ -16,8 +16,14 @@ Above may change by a little due to time constraints and material.
 Melih will update this part
 
 - Week 2:
-> [!NOTE]
-Sefa will update this part
+    - Image Segmentation Using CNNs
+    - U-Net
+    - Evaluation Metrics
+    - YOLO Architecture
+
+Above may change by a little due to time constraints and material.
+
+- Notebook Session for Week 1:
 
 - Notebook Session for Week 2:
 > [!NOTE]
