@@ -155,7 +155,7 @@ Pooling layers provide `translation invariance` meaning if an object in the imag
 - **Average Pooling**: Extracts a smoothed summary of the region. $$Y = \frac{1}{f^2} \sum_{i,j} I_{i,j}$$
 
 <p align="center">
-  <img src="assets/pooling_scene.gif" />
+  <img src="assets/max_7pooling_scene.gif" />
 </p>
 
 ---
