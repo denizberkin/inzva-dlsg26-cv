@@ -19,3 +19,4 @@
 - [MobileNet](https://arxiv.org/pdf/1704.04861.pdf)
 - [EfficientNet](https://arxiv.org/pdf/1905.11946.pdf)
 - [Vision Transformers (ViT)](https://arxiv.org/pdf/2010.11929.pdf)
+- [Transfer Learning](https://toloka.ai/blog/transfer-learning/)

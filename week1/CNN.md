@@ -49,7 +49,7 @@ For a single position of a **$f\times f$** kernel **$F$**, sliding over an image
 - **$b$**: bias term
 
 <p align="center">
-  <img src="assets/conv2d_sw_scene.gif" />
+  <img src="assets/conv2d_sw_scene.gif" width="60%" />
 </p>
 
 ### 3.2 **Handling Multi Channel**
@@ -155,7 +155,7 @@ Pooling layers provide `translation invariance` meaning if an object in the imag
 - **Average Pooling**: Extracts a smoothed summary of the region. $$Y = \frac{1}{f^2} \sum_{i,j} I_{i,j}$$
 
 <p align="center">
-  <img src="assets/max_pooling_scene.gif" />
+  <img src="assets/max_pooling_scene.gif" width="60%" />
 </p>
 
 ---
@@ -172,7 +172,7 @@ It is a simple yet powerful regularization. During training, some set of neurons
 - **Inference**: Dropout is turned off at test.
 
 <p align="center">
-  <img src="assets/dropout_scene.gif" />
+  <img src="assets/dropout_scene.gif" width="60%" />
 </p>
 
 ```py
@@ -211,7 +211,7 @@ Transformation: For a mini-batch  $\mathcal{B} = \{x_1, \dots, x_m\}$:
 * $\gamma$ and $\beta$: Learnable parameters that allow the network to restore the original distribution by learning mean and variance.
 
 <p align="center">
-  <img src="assets/batchnorm_scene.gif" />
+  <img src="assets/batchnorm_scene.gif" width="60%" />
 </p>
 
 ```py
@@ -280,7 +280,7 @@ Where $\alpha$ is a small constant that allows a small gradient pass.
 | **Softmax** | $(0, 1)$ | Multi-class classification output only. |
 
 <p align="center">
-  <img src="assets/activation_scene.gif" />
+  <img src="assets/activation_scene.gif" width="60%" />
 </p>
 
 ---

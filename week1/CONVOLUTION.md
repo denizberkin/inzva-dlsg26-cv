@@ -35,7 +35,7 @@ Considering a change in perspective greatly changes how we interpret the process
 * **Reversing and Sliding**: $\text{Dice B Reversed}\rightarrow A[k], B[12-k], k\in [0, 12]$
 
 <p align="center">
-  <img src="assets/reverse_slide.gif" />
+  <img src="assets/reverse_slide.gif" width="60%" />
 </p>
 
 * **Product**:
@@ -49,13 +49,13 @@ $$\text{for } n=12, \sum_{k=-\infty}^{\infty}a_k \cdot b_{n-k}$$
 $$(A*B)(n)= \sum_{k=-\infty}^{\infty}A[n]\cdot B[n-k]$$
 
 <p align="center">
-  <img src="assets/dice_scene.gif" />
+  <img src="assets/dice_scene.gif" width="60%" />
 </p>
 
 **We can just as easily see these ``dice faces`` as probabilities. The <ins>probability of any outcome</ins> $n$ will still be the same calculation.**
 
 <p align="center">
-  <img src="assets/float_scene.gif" />
+  <img src="assets/float_scene.gif" width="60%"/>
 </p>
 
 ---
@@ -78,7 +78,7 @@ In discrete systems, convolution is often visualized as a sliding window where a
 4. The window slides one step to the right, and the process repeats.
 
 <div align="center">
-  <img src="assets/sliding_window_scene.gif" alt="sliding_window_scene">
+  <img src="assets/sliding_window_scene.gif" alt="sliding_window_scene" width="60%">
 </div>
 
 ---
@@ -167,7 +167,5 @@ For a kernel of size **$m \times n$**, filter becomes:
 
 **Output of blurring**
 <p align="center">
-  <img src="assets/gaussian_blur.png" />
+  <img src="assets/gaussian_blur.png" width="60%" />
 </p>
-
-The end.
