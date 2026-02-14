@@ -79,7 +79,6 @@ Semantic segmentation example:
   <img src="assets/semantic_seg.png" />
 </p>
 
-
 ---
 
 ## 4. **Generative Models && Reconstruction**
@@ -264,15 +263,21 @@ While this will be thoroughly covered in the following weeks, it would not have 
 
 A break again :)
 
+---
+
 
 # Transfer Learning
 
 It is the practice of taking a model trained on a large scale dataset trained on either a generic or a similar task and _transferring_ the knowledge to a smaller, task-specific dataset.
 
+---
+
 ## 1. Key Strategies:
 - **Pre-trained weights**: Initialize your model with learned weights instead of random noise.
 - **Freeze layers**: Prevent updates to certain layers during training, usually for earlier layers as mentioned in the [feature hierarchy section of CNN markdown](CNN.md#21-feature-hierarchy). 
 - **Fine-tuning**: Train the model with a smaller learning rate across all layers after partially training the new layers. Allow the model to adjust pre-trained features to the new task as well.
+
+---
 
 ## 2. Training Scenarios:
 
@@ -308,6 +313,13 @@ optimizer = torch.optim.Adam(model.fc.parameters(), lr=1e-3)  # only update adde
   <img src="assets/transfer_learning.png" width="60%" />
 </p>
 
+---
+
+<p align="center">
+  <img src="assets/can_cook.png" width="60%" />
+</p>
+
+---
 
 # Transformations & Augmentations
 
@@ -339,6 +351,8 @@ rotated_img = cv2.warpAffine(img, rotation_matrix, (cols, rows))
 flipped_img = cv2.flip(img, 1)
 ```
 
+---
+
 ## 2. Colour Space Transformations
 
 These manipulate the information within pixels, their intensity, rather than spatial arrangement. Could help on lighting condition changes, colour variations, etc.
@@ -366,6 +380,8 @@ brightness_mat = np.ones(img.shape, dtype=np.uint8) * 50  # increase brightness 
 bright_img = cv2.add(img, brightness_mat)
 
 ```
+
+---
 
 ## 3. Noise Injection
 

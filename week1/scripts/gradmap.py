@@ -10,7 +10,6 @@ import torch.nn as nn
 from torchvision import models
 
 
-# global variables
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 BASE_DIR = os.getcwd()
 SHAPE = (224, 224)
@@ -20,7 +19,9 @@ SAMPLE_PATH = os.path.join(BASE_DIR, "data", sample)
 
 
 def get_model(device: torch.device = "cpu") -> nn.Module:
-    model = models.resnet18(pretrained=True).to(device).eval()
+    model = models.resnet50(
+        weights=models.ResNet50_Weights.IMAGENET1K_V2
+    ).to(device).eval()
     return model
 
 
@@ -31,7 +32,6 @@ def read_sample(path: str) -> np.ndarray:
 
 
 def preprocess_image(img: np.ndarray, shape: tuple = (224, 224)) -> np.ndarray:
-    """preprocess image to input shape and normalize to norm distribution"""
     mean, std = [0.485, 0.456, 0.406], [0.229, 0.224, 0.225]
     img_resized = cv2.resize(img, shape)
     img_normalized = img_resized / 255.0
@@ -43,20 +43,22 @@ def to_tensor(img: np.ndarray, device: torch.device = "cpu") -> torch.Tensor:
 
 
 def get_activation_map(feat_tensor: torch.Tensor):
-    # calc mean across channels, ~get single 2D activation map
     act_map = torch.mean(feat_tensor[0], dim=0).cpu().numpy()
-
-    # normalize to [0, 255]
     act_map = np.maximum(act_map, 0)
     act_map /= np.max(act_map) + 1e-5
     return (act_map * 255.).astype(np.uint8)
 
 
-def plot_activation_maps(maps: list[np.ndarray], savefig: bool = False):
-    _, axes = plt.subplots(1, 3, figsize=(18, 6))
-    for i, ax in enumerate(axes):
-        ax.imshow(maps[i], cmap="magma")
-        ax.axis("off")
+def plot_activation_maps(original: np.ndarray, maps: list[np.ndarray], savefig: bool = False):
+    total = 1 + len(maps)
+    _, axes = plt.subplots(1, total, figsize=(4 * total, 4))
+
+    axes[0].imshow(original)
+    axes[0].axis("off")
+
+    for i, m in enumerate(maps):
+        axes[i + 1].imshow(m, cmap="magma")
+        axes[i + 1].axis("off")
 
     plt.tight_layout()
     if savefig:
@@ -71,17 +73,18 @@ def extract_feature_maps(model: nn.Module, input_tensor: torch.Tensor) -> list[t
     f2 = model.layer2(f1)
     f3 = model.layer3(f2)
     f4 = model.layer4(f3)
-    return [f1, f2, f3, f4]
+    return [x, f1, f2, f3, f4]
 
 
 def pipeline(sample_path: str, device: torch.device = "cpu"):
     image = read_sample(sample_path)
+    resized_image = cv2.resize(image, SHAPE)
     preprocessed = preprocess_image(image, SHAPE)
     input_tensor = to_tensor(preprocessed, device)
 
     model = get_model(device)
     maps = [get_activation_map(t) for t in extract_feature_maps(model, input_tensor)]
-    plot_activation_maps(maps[:3])
+    plot_activation_maps(resized_image, maps)
 
 
 if __name__ == "__main__":

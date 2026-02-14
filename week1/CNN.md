@@ -110,8 +110,6 @@ $W_{out}$ is same and $C_{out}=64$ as defined in the layer.
 ---
 
 ## 4. Grad Map Visualizations
-<!-- The Grad CAM example is in [this script](gradmap.ipynb). In there, I tried to show the changes on the kernel throughout a simple learning process. -->
-
 The Grad CAM weight $\omega_k^c$ for a specific class $c$ and feature map $f$ is calculated by taking the average of the gradients over the $W, H$:
 
 **$$\omega_k^c = \frac{1}{Z} \sum_i\sum_j{\frac{\delta Y^c}{\delta A_{ij}^k}}$$**
@@ -122,6 +120,10 @@ where:
 
 You can define a hook function to run each time grad is updated. In forward loop, `register_hook` method of `torch.Tensor` should be used to add your custom function to it.
 [gradmap script](gradmap.py)
+
+<p align="center">
+  <img src="assets/resnet_activation.png" width="60%" />
+</p>
 
 Could also play with [tensorflow playground - nn visualizer](https://playground.tensorflow.org) or demos from [convnetjs from Andrej Karpathy](https://cs.stanford.edu/people/karpathy/convnetjs/).
 
