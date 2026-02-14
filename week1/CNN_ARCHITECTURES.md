@@ -56,7 +56,7 @@ Actually there are tons of processes here you will dive on the next week. For no
 - mAP (mean Average Precision)
 - Focal Loss, IoU loss types (loss functions used in detection)
 
-**<p align="center">Finally, results <br><img src="assets/detection_sample1.png" /><br>And some other results<br><img src="assets/detection_sample2.png" /></p>**
+**<p align="center">Finally, results <br><img src="assets/detection_sample1.png" width="60%" /><br>And some other results<br><img src="assets/detection_sample2.png" width="60%" /></p>**
 <p align="center"></p>
 
 ---
@@ -120,7 +120,7 @@ $$q_\phi(z|x) = \mathcal{N}(z;\mu_\phi(x), \sigma^2_\phi(x))$$
 
 
 <p align="center">
-  <img src="assets/vae_scene.gif" />
+  <img src="assets/vae_scene.gif" width="60%" />
 </p>
 
 This is just a teaser. You could check the [original paper](https://arxiv.org/pdf/1312.6114) for intricate details on the network. Neat solutions!
@@ -257,9 +257,124 @@ While this will be thoroughly covered in the following weeks, it would not have 
 - Context: ViT divides images into patches and treats each patch as a token, like a word in a sentence. Although it needs a lot of data to obtain meaningful embeddings, learning how parts of the image relate to itself and each other part creates a powerful relationship model. In my opinion, surpassing the spatial capabilities of CNNs as unconnected patches can still pass information between themselves.
 
 <p align="center">
-  <img src="assets/vit.png" />
+  <img src="assets/vit.png" width="60%" />
 </p>
 
 ---
 
 A break again :)
+
+
+# Transfer Learning
+
+It is the practice of taking a model trained on a large scale dataset trained on either a generic or a similar task and _transferring_ the knowledge to a smaller, task-specific dataset.
+
+## 1. Key Strategies:
+- **Pre-trained weights**: Initialize your model with learned weights instead of random noise.
+- **Freeze layers**: Prevent updates to certain layers during training, usually for earlier layers as mentioned in the [feature hierarchy section of CNN markdown](CNN.md#21-feature-hierarchy). 
+- **Fine-tuning**: Train the model with a smaller learning rate across all layers after partially training the new layers. Allow the model to adjust pre-trained features to the new task as well.
+
+## 2. Training Scenarios:
+
+| Dataset Size | Task Similarity | Strategy |
+|--------------|-----------------|----------|
+| Small        | High            | Freeze all, train only new layers / head |
+| Small        | Low             | Difficult case, may need more layers, other backbones etc. |
+| Large        | High            | Fine-tuning with a small $\eta$ |
+| Large        | Low             | Use pretrained weights as initialization, possibly train everything |
+
+Example code that loads pre-trained weights to a ResNet50 model, freezes all layers and only trains the final fc layer for a new classification task:
+```py
+import torch
+import torch.nn as nn
+from torchvision import models
+
+num_classes = 10
+model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V1)  # load weights
+# freeze all layers
+for param in model.parameters():
+    param.requires_grad = False
+
+# replace final layer(s)
+# new layers default to requires_grad=True
+num_features = model.fc.in_features
+model.fc = nn.Linear(num_features, num_classes)
+
+optimizer = torch.optim.Adam(model.fc.parameters(), lr=1e-3)  # only update added layers
+```
+
+
+<p align="center">
+  <img src="assets/transfer_learning.png" width="60%" />
+</p>
+
+
+# Transformations & Augmentations
+
+Goal is to;
+- Standardize data by some formatting
+- Increase data size & diversity hopefully preventing overfitting
+
+## 1. Geometric Transformations
+Geometric transformations modify the spatial arrangement of pixels. They map pixel positions $(x, y)$ from input to new positions $(x', y')$ in the output image. 
+Common geometric transformations include:
+- **Translation**: Shifting the image along an axis.
+- **Rotation**: Rotating the image by a certain angle $\theta$.
+- **Scaling**: Resizing the image by a factor $s$.
+- **Affine Transformations**: Preserving points, straight lines, and planes. Includes shearing and combinations of the above transformations.
+
+Example:
+```py
+import cv2
+import numpy as np
+
+img = cv2.imread("arbitrary_image.png")
+rows, cols = img.shape[:2]
+
+# rotate 45 degrees
+rotation_matrix = cv2.getRotationMatrix2D((cols/2, rows/2), 45, 1)
+rotated_img = cv2.warpAffine(img, rotation_matrix, (cols, rows))
+
+# horizontal flip
+flipped_img = cv2.flip(img, 1)
+```
+
+## 2. Colour Space Transformations
+
+These manipulate the information within pixels, their intensity, rather than spatial arrangement. Could help on lighting condition changes, colour variations, etc.
+Common colour spaces:
+- **RGB**: Standard Red-Green-Blue colour space.
+- **HSV**: Hue-Saturation-Value, separates colour information (hue) from intensity (value), useful for colour-based segmentation.
+- **Grayscale**: Just luminance information, reduced dimensionality
+
+There are many more colour spaces with their respective advantages on some cases. Mostly domain specific benefits, one must research.
+
+Common colour space transformations include:
+- **Brightness**: Adding a constant bias to values. $I'= I + \beta$
+- **Contrast**: Scaling values. $I' = \alpha\cdot I$
+
+Example:
+```py
+import cv2
+import numpy as np
+
+img = # presume already defined
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # RGB to Grayscale
+hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)    # RGB to HSV
+
+brightness_mat = np.ones(img.shape, dtype=np.uint8) * 50  # increase brightness by 50
+bright_img = cv2.add(img, brightness_mat)
+
+```
+
+## 3. Noise Injection
+
+Injecting noise to simulate real-world scenarios & imperfections (e.g. sensor noise, grain effect).
+
+Common noise types:
+- **Gaussian Noise**: very suggestive name
+- **Cutout**: Masking out a square region of the input
+
+
+There are many more transformations available at wide variety of popular and non-popular libraries, papers. You would have to check them out and experiment for yourself.
+**Little warning**: Transformations can be highly domain specific. It is crucial to understand the behaviour of the data (test data mostly) and mimic that behaviour into your train set with your transformations.

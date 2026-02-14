@@ -49,7 +49,7 @@ For a single position of a **$f\times f$** kernel **$F$**, sliding over an image
 - **$b$**: bias term
 
 <p align="center">
-  <img src="assets/conv2d_sw_scene.gif" />
+  <img src="assets/conv2d_sw_scene.gif" width="60%" />
 </p>
 
 ### 3.2 **Handling Multi Channel**
@@ -155,14 +155,77 @@ Pooling layers provide `translation invariance` meaning if an object in the imag
 - **Average Pooling**: Extracts a smoothed summary of the region. $$Y = \frac{1}{f^2} \sum_{i,j} I_{i,j}$$
 
 <p align="center">
-  <img src="assets/pooling_scene.gif" />
+  <img src="assets/max_pooling_scene.gif" width="60%" />
 </p>
 
 ---
 
 ## 6. Regularization Layers
 
-### 6.1 TODO: will add regularization layer notes here
+On a daily basis, models with millions, billions of parameters get trained daily and are prone to overfitting. Regularization layers introduce constraints, noise or you might call, a disturbance to the learning process in hopes to prevent this.
+
+### 6.1 Dropout
+
+It is a simple yet powerful regularization. During training, some set of neurons are dropped (zeroed out) with a probability $p$.
+- Prevents network to rely on only some neurons and nothing else, distributing "learned weights"
+- **Interesting practice**: remaninig neurons are scaled with $\frac{1}{1-p}$ to maintain the total magnitude of the activation.
+- **Inference**: Dropout is turned off at test.
+
+<p align="center">
+  <img src="assets/dropout_scene.gif" width="60%" />
+</p>
+
+```py
+import torch
+import torch.nn as nn
+
+dropout = nn.Dropout(p=0.5)
+input_tensor = torch.randn(1, 10)
+
+# training
+output_train = dropout(input_tensor)
+print(f"train out: {output_train}")
+# check how many neurons are dropped
+print(f"how many zeroes: {(output_train == 0).sum()}")  # an arbitrary number between 0 and 10, likely around 5 (p=0.5)
+
+dropout.eval()  # same as model.eval(), applies to all Module's within
+output_eval = dropout(input_tensor)
+print(f"eval out: {output_eval}")  # check the difference
+print(f"how many zeroes: {(output_eval == 0).sum()}")  # should be 0 in eval mode.
+```
+
+### 6.2 Batch Normalization
+
+Batch Normalization (BatchNorm) addresses the **Covariate Shift problem**, where the distribution of input changes during training as the parameters of previous layers change. 
+- Normalizes the output of previous layer by normalizing with the batch mean and variance
+- **Warning**: Heavily dependant on the batch size, lower batch sizes will lead to noisier estimates, sometimes interrupting learning.
+- **Warning 2**: As your test set change, distribution of the data can too, which can lead to breaking results. In these cases, it would be better to use non-batch dependant statistics (e.g. layer normalization, group normalization).
+
+Transformation: For a mini-batch  $\mathcal{B} = \{x_1, \dots, x_m\}$:
+
+1. **Calculate mean**: $\mu_{\mathcal{B}} = \frac{1}{m} \sum_{i=1}^{m} x_i$
+2. **Calculate variance**: $\sigma_{\mathcal{B}}^2 = \frac{1}{m} \sum_{i=1}^{m} (x_i - \mu_{\mathcal{B}})^2$
+3. **Normalize**: $\hat{x}_i = \frac{x_i - \mu_{\mathcal{B}}}{\sqrt{\sigma_{\mathcal{B}}^2 + \epsilon}}$
+4. **Scale and Shift**: $y_i = \gamma \hat{x}_i + \beta$ (where $\gamma$ and $\beta$ are learnable parameters)
+* $\epsilon$: small constant for zero division / numerical stability
+* $\gamma$ and $\beta$: Learnable parameters that allow the network to restore the original distribution by learning mean and variance.
+
+<p align="center">
+  <img src="assets/batchnorm_scene.gif" width="60%" />
+</p>
+
+```py
+import torch
+import torch.nn as nn
+
+bn = nn.BatchNorm2d(num_features=64)  # num_channels of previous layer output must match num_features
+input_tensor = torch.randn(1, 64, 32, 32)
+output_tensor = bn(input_tensor)
+print(output_tensor.shape)  # torch.Size([1, 64, 32, 32])
+# can also check the old and new mean and variance
+print(f"input mean: {input_tensor.mean().item():.4f}, input var: {input_tensor.var().item():.4f}")
+print(f"output mean: {output_tensor.mean().item():.4f}, output var: {output_tensor.var().item():.4f}")
+```
 
 ---
 
@@ -217,7 +280,7 @@ Where $\alpha$ is a small constant that allows a small gradient pass.
 | **Softmax** | $(0, 1)$ | Multi-class classification output only. |
 
 <p align="center">
-  <img src="assets/activation_scene.gif" />
+  <img src="assets/activation_scene.gif" width="60%" />
 </p>
 
 ---
